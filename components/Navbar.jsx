@@ -1,10 +1,18 @@
+"use client";
 import Link from "next/link";
 import React from "react";
+
+const reload = () => {
+  window.location.reload();
+};
 
 const Navbar = () => {
   return (
     <header className="flex py-3 flex-wrap justify-around">
-      <h1 className="text-lg font-semibold text-center sm:text-start">
+      <h1
+        className="text-lg font-semibold text-center sm:text-start cursor-pointer"
+        onClick={reload}
+      >
         ToDo App
       </h1>
       <nav className="w-fit hidden sm:flex">
