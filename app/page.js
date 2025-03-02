@@ -1,3 +1,5 @@
+import TaskTable from "@/components/TaskTable";
+
 export default function Home() {
   return (
     <main>
@@ -20,6 +22,7 @@ export default function Home() {
           Add Task
         </button>
       </form>
+      <TaskTable />
     </main>
   );
 }
