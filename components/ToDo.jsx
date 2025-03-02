@@ -7,12 +7,19 @@ const ToDo = () => {
         scope="row"
         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
-        Apple MacBook Pro 17"
+        1
       </th>
-      <td className="px-6 py-4">Silver</td>
-      <td className="px-6 py-4">Laptop</td>
-      <td className="px-6 py-4">$2999</td>
-      <td className="px-6 py-4">$2999</td>
+      <td className="px-6 py-4">Study</td>
+      <td className="px-6 py-4">Learn Next Js</td>
+      <td className="px-6 py-4">Pending</td>
+      <td className="px-6 py-4 flex gap-2">
+        <button className="py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 ease-in-out cursor-pointer">
+          Delete
+        </button>
+        <button className="py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 ease-in-out cursor-pointer">
+          Done
+        </button>
+      </td>
     </tr>
   );
 };
