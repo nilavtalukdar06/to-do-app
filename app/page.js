@@ -1,6 +1,7 @@
 "use client";
 import TaskTable from "@/components/TaskTable";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,11 @@ export default function Home() {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    try {
+    } catch (error) {
+      console.error(`Failed to submit data, error: ${error}`);
+      toast.error("Error submitting data");
+    }
   };
 
   return (
