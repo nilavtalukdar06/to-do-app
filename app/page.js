@@ -14,13 +14,16 @@ export default function Home() {
     setFormData((form) => ({ ...form, [name]: value }));
   };
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-  }
+  };
 
   return (
     <main>
-      <form className="flex items-start flex-col gap-2 max-w-[600px] mt-24 px-2 mx-auto">
+      <form
+        className="flex items-start flex-col gap-2 max-w-[600px] mt-24 px-2 mx-auto"
+        onSubmit={onSubmitHandler}
+      >
         <input
           type="text"
           name="title"
@@ -39,7 +42,6 @@ export default function Home() {
         <button
           type="submit"
           className="bg-orange-600 py-3 px-11 text-white rounded-lg cursor-pointer hover:bg-orange-800 transition-all duration-200 ease-in-out"
-          onSubmit={onSubmitHandler}
         >
           Add Task
         </button>
