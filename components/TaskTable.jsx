@@ -1,7 +1,7 @@
 import React from "react";
 import ToDo from "./ToDo";
 
-const TaskTable = ({ data }) => {
+const TaskTable = ({ data, deleteTask }) => {
   return (
     <section className="relative overflow-x-auto mt-24 w-[80%] sm:w-[60%] mx-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -34,6 +34,7 @@ const TaskTable = ({ data }) => {
               id={index + 1}
               status={item.status}
               dbId={item._id}
+              deleteTask={deleteTask}
             />
           ))}
         </tbody>

@@ -39,6 +39,19 @@ export default function Home() {
     }
   };
 
+  const deleteTask = async (documentId) => {
+    try {
+      const response = await axios.delete("/api/tasks", {
+        data: { documentId },
+      });
+      toast.success(response.data.msg);
+      fetchTasks();
+    } catch (error) {
+      console.error(`Error removing task`);
+      toast.error("Error removing task");
+    }
+  };
+
   return (
     <main>
       <form
@@ -69,7 +82,7 @@ export default function Home() {
           Add Task
         </button>
       </form>
-      <TaskTable data={taskData} />
+      <TaskTable data={taskData} deleteTask={deleteTask} />
     </main>
   );
 }
