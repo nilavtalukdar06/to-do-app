@@ -6,12 +6,14 @@ This project is a simple to-do application built using Node.js, Next.js, and Mon
 ## Data Flow Diagram
 ```mermaid
 flowchart TD
-    A[Client Request] --> B[Next.js API Routes]
-    B --> C[Database Connection \(connectDb\)]
-    C --> D[MongoDB Database]
-    D --> E[taskModel Operations]
-    E --> B
-    B --> F[Client Response]
+    A[Browser Client] --> B[Next.js API Server]
+    B --> C[Authentication & Validation Middleware]
+    C --> D[Database Connection (connectDb)]
+    D --> E[MongoDB Database]
+    E --> F[Task CRUD Operations]
+    F --> D
+    D --> B
+    B --> G[API Response]
 ```
 
 ## Database Modeling
