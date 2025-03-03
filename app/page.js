@@ -52,6 +52,17 @@ export default function Home() {
     }
   };
 
+  const completeTask = async (documentId) => {
+    try {
+      const response = await axios.put("/api/tasks", { documentId });
+      toast.success(response.data.msg);
+      fetchTasks();
+    } catch (error) {
+      console.error(`Error updating status, error: ${error}`);
+      toast.error("Error updating status");
+    }
+  };
+
   return (
     <main>
       <form
@@ -82,7 +93,11 @@ export default function Home() {
           Add Task
         </button>
       </form>
-      <TaskTable data={taskData} deleteTask={deleteTask} />
+      <TaskTable
+        data={taskData}
+        deleteTask={deleteTask}
+        completeTask={completeTask}
+      />
     </main>
   );
 }
