@@ -11,7 +11,9 @@ const loadDb = async () => {
   }
 };
 
-loadDb();
+loadDb().catch((error) => {
+  console.error("Error loading database:", error);
+});
 
 export async function GET() {
   try {

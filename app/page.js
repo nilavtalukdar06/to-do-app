@@ -11,9 +11,14 @@ export default function Home() {
   const [taskData, setTaskData] = useState([]);
 
   const fetchTasks = async () => {
-    const response = await fetch("/api/tasks");
-    const data = await response.json();
-    setTaskData(data.tasks);
+    try {
+      const response = await fetch("/api/tasks");
+      const data = await response.json();
+      setTaskData(data.tasks);
+    } catch (error) {
+      console.error(`Error fetching tasks: ${error}`);
+      toast.error("Error fetching tasks");
+    }
   };
 
   useEffect(() => {
