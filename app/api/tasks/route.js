@@ -24,8 +24,11 @@ export async function POST(request) {
     console.log("Data created successfully");
   } catch (error) {
     console.error(`Error creating data, error: ${error}`);
+    return NextResponse.json({
+      msg: "Failed to create data",
+    });
   }
   return NextResponse.json({
-    msg: "TODO Created",
+    msg: "Task is created successfully",
   });
 }

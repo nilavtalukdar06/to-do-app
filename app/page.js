@@ -1,5 +1,6 @@
 "use client";
 import TaskTable from "@/components/TaskTable";
+import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -18,6 +19,12 @@ export default function Home() {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
+      const response = await axios.post("/api/tasks", formData);
+      if (!response.ok) {
+        throw new Error("Failed to submit data");
+      }
+      const data = await response.json();
+      toast.success(data.msg);
     } catch (error) {
       console.error(`Failed to submit data, error: ${error}`);
       toast.error("Error submitting data");
@@ -37,6 +44,7 @@ export default function Home() {
           className="px-3 py-2 border-2 w-full rounded-lg border-gray-400 focus:outline-none"
           onChange={onChangeHandler}
           value={formData.title}
+          required
         />
         <textarea
           name="description"
@@ -44,6 +52,7 @@ export default function Home() {
           className="w-full px-3 py-2 border-2 focus:outline-none border-gray-400 rounded-lg"
           onChange={onChangeHandler}
           value={formData.description}
+          required
         />
         <button
           type="submit"
