@@ -1,7 +1,7 @@
 import React from "react";
 import ToDo from "./ToDo";
 
-const TaskTable = () => {
+const TaskTable = ({ data }) => {
   return (
     <section className="relative overflow-x-auto mt-24 w-[80%] sm:w-[60%] mx-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -25,7 +25,17 @@ const TaskTable = () => {
           </tr>
         </thead>
         <tbody>
-          <ToDo />
+          {/* <ToDo /> */}
+          {data.map((item, index) => (
+            <ToDo
+              key={index}
+              title={item.title}
+              description={item.description}
+              id={index + 1}
+              status={item.status}
+              dbId={item._id}
+            />
+          ))}
         </tbody>
       </table>
     </section>

@@ -1,7 +1,7 @@
 "use client";
 import TaskTable from "@/components/TaskTable";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Home() {
@@ -9,6 +9,16 @@ export default function Home() {
     title: "",
     description: "",
   });
+  const [taskData, setTaskData] = useState([]);
+
+  const fetchTasks = async () => {
+    const response = await axios.get("/api/tasks");
+    setTaskData(response.data.tasks);
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   const onChangeHandler = (e) => {
     const name = e.target.name;
@@ -21,6 +31,8 @@ export default function Home() {
     try {
       const response = await axios.post("/api/tasks", formData);
       toast.success(response.data.msg);
+      setFormData((form) => ({ ...form, title: "", description: "" }));
+      fetchTasks();
     } catch (error) {
       console.error(`Failed to submit data, error: ${error}`);
       toast.error("Error submitting data");
@@ -57,7 +69,7 @@ export default function Home() {
           Add Task
         </button>
       </form>
-      <TaskTable />
+      <TaskTable data={taskData} />
     </main>
   );
 }
