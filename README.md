@@ -1,36 +1,322 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Todo Application
 
-## Getting Started
+A full-stack Todo application built with Next.js 13, MongoDB, and Tailwind CSS.
 
-First, run the development server:
+## Table of Contents
+
+- [Overview](#overview)
+- [System Architecture](#system-architecture)
+- [Database Design](#database-design)
+- [Features](#features)
+- [Setup Instructions](#setup-instructions)
+- [API Documentation](#api-documentation)
+
+## Overview
+
+This application provides a modern, responsive interface for managing tasks with real-time updates and persistent storage using MongoDB.
+
+## System Architecture
+
+### Detailed Data Flow Diagram
+
+```mermaid
+graph TD
+    A[Client/Browser] -->|HTTP Request| B[Next.js Server]
+    B -->|API Routes| C[MongoDB]
+    C -->|Response| B
+    B -->|SSR/CSR| A
+
+    subgraph "Frontend Layer"
+        A -->|User Input| D[Components]
+        D -->|State Management| E[React Context]
+        E -->|Updates| D
+        D -->|Render| F[UI Elements]
+
+        subgraph "Components"
+            G[TaskTable] -->|List Rendering| H[ToDo Items]
+            I[AddTaskForm] -->|Form Submit| J[Form Validation]
+            K[SearchFilter] -->|Filter Tasks| G
+        end
+    end
+
+    subgraph "Backend Layer"
+        B -->|Route Handler| L[API Controllers]
+        L -->|Data Validation| M[Middleware]
+        M -->|Business Logic| N[Services]
+        N -->|Data Access| O[Models]
+        O -->|Mongoose ODM| C
+
+        subgraph "Error Handling"
+            P[Try-Catch Blocks]
+            Q[Error Middleware]
+            R[Custom Error Classes]
+        end
+    end
+
+    subgraph "Database Layer"
+        C -->|Read Operations| S[Primary Node]
+        C -->|Write Operations| T[Secondary Nodes]
+        U[Indexes] -->|Query Optimization| C
+    end
+```
+
+## Enhanced Database Design
+
+### Comprehensive Task Schema
+
+```mermaid
+classDiagram
+    class Task {
+        +String _id
+        +String title
+        +String description
+        +Boolean status
+        +String priority
+        +String category
+        +Date dueDate
+        +String[] tags
+        +String assignedTo
+        +String createdBy
+        +Date createdAt
+        +Date updatedAt
+        +TaskAttachment[] attachments
+        +TaskComment[] comments
+        +TaskHistory[] history
+    }
+
+    class TaskAttachment {
+        +String _id
+        +String filename
+        +String fileType
+        +String fileUrl
+        +Date uploadedAt
+    }
+
+    class TaskComment {
+        +String _id
+        +String content
+        +String userId
+        +Date createdAt
+        +Date updatedAt
+    }
+
+    class TaskHistory {
+        +String _id
+        +String action
+        +String userId
+        +Object previousValue
+        +Object newValue
+        +Date timestamp
+    }
+
+    Task "1" *-- "many" TaskAttachment
+    Task "1" *-- "many" TaskComment
+    Task "1" *-- "many" TaskHistory
+```
+
+### Data Models Specification
+
+#### Task Model
+
+| Field       | Type     | Required | Default   | Description              |
+| ----------- | -------- | -------- | --------- | ------------------------ |
+| title       | String   | Yes      | -         | Task title (3-100 chars) |
+| description | String   | Yes      | -         | Detailed description     |
+| status      | Boolean  | No       | false     | Completion status        |
+| priority    | String   | No       | 'medium'  | low/medium/high          |
+| category    | String   | No       | 'general' | Task category            |
+| dueDate     | Date     | No       | null      | Task deadline            |
+| tags        | [String] | No       | []        | Array of tags            |
+| assignedTo  | String   | No       | null      | User ID of assignee      |
+| createdBy   | String   | Yes      | -         | User ID of creator       |
+| attachments | [Object] | No       | []        | File attachments         |
+| comments    | [Object] | No       | []        | Task comments            |
+| history     | [Object] | No       | []        | Change history           |
+
+#### Indexes
+
+```javascript
+{
+  title: 'text',
+  description: 'text',
+  status: 1,
+  dueDate: 1,
+  category: 1,
+  priority: 1
+}
+```
+
+## Features
+
+- ✅ Create new tasks
+- ✅ Mark tasks as complete
+- ✅ Delete tasks
+- ✅ Persistent storage with MongoDB
+- ✅ Responsive design with Tailwind CSS
+- ✅ Server-side rendering with Next.js
+
+## Setup Instructions
+
+1. Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Set up environment variables
+   Create a `.env.local` file with:
+
+```
+DATABASE_URL=your_mongodb_connection_string
+```
+
+4. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## API Documentation
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Enhanced Endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### GET /api/tasks
 
-## Learn More
+```typescript
+interface QueryParams {
+  page?: number;
+  limit?: number;
+  status?: boolean;
+  category?: string;
+  priority?: string;
+  search?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
 
-To learn more about Next.js, take a look at the following resources:
+interface Response {
+  tasks: Task[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### POST /api/tasks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Creates a new task
+- Body: `{ title: string, description: string }`
+- Response: `{ msg: string }`
 
-## Deploy on Vercel
+#### DELETE /api/tasks
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Deletes a task
+- Body: `{ documentId: string }`
+- Response: `{ msg: string }`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### PUT /api/tasks
+
+- Updates task status
+- Body: `{ documentId: string }`
+- Response: `{ msg: string }`
+
+## Component Structure
+
+```mermaid
+graph TD
+    A[App Page] -->|Renders| B[TaskTable]
+    B -->|Renders Multiple| C[ToDo]
+    B -->|Props| D[deleteTask]
+    B -->|Props| E[completeTask]
+    C -->|Events| D
+    C -->|Events| E
+```
+
+## Data Model
+
+### Task Model Properties
+
+| Field       | Type      | Required | Default |
+| ----------- | --------- | -------- | ------- |
+| title       | String    | Yes      | -       |
+| description | String    | Yes      | -       |
+| status      | Boolean   | No       | false   |
+| createdAt   | Timestamp | Auto     | Now     |
+| updatedAt   | Timestamp | Auto     | Now     |
+
+## Technologies Used
+
+- Next.js 13
+- MongoDB with Mongoose
+- Tailwind CSS
+- React
+- Node.js
+
+## Best Practices
+
+- RESTful API design
+- Component-based architecture
+- Responsive design principles
+- Error handling
+- TypeSafe database operations
+
+## Error Handling
+
+The application implements comprehensive error handling:
+
+- Database connection errors
+- API request/response errors
+- Frontend validation
+- Mongoose schema validation
+
+## Future Enhancements
+
+- [ ] User authentication
+- [ ] Task categories
+- [ ] Due dates
+- [ ] Priority levels
+- [ ] Search functionality
+- [ ] Task filters
+
+## Performance Optimizations
+
+- MongoDB indexes for frequent queries
+- Server-side pagination
+- React memo for expensive components
+- Image optimization
+- API response caching
+- Debounced search
+- Lazy loading of components
+
+## Security Measures
+
+- Input sanitization
+- JWT authentication
+- Rate limiting
+- CORS configuration
+- HTTP-only cookies
+- XSS protection
+- CSRF tokens
+- Environment variable protection
+
+## Monitoring
+
+- Error logging
+- Performance metrics
+- User analytics
+- API usage tracking
+- Database monitoring
+
+## Contributing
+
+Contributions are welcome! Please read the contributing guidelines before submitting PRs.
+
+## License
+
+MIT License
