@@ -7,7 +7,7 @@ This project is a simple to-do application built using Node.js, Next.js, and Mon
 ```mermaid
 flowchart TD
     A[Client Request] --> B[Next.js API Routes]
-    B --> C[Database Connection (connectDb)]
+    B --> C[Database Connection \(connectDb\)]
     C --> D[MongoDB Database]
     D --> E[taskModel Operations]
     E --> B
