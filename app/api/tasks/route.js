@@ -49,3 +49,19 @@ export async function DELETE(request) {
     msg: "Task removed successfully",
   });
 }
+
+export async function PUT(request) {
+  const { documentId } = await request.json();
+  try {
+    await taskModel.updateOne({ _id: documentId }, { $set: { status: true } });
+  } catch (error) {
+    console.error(`Error updating status, error: ${error}`);
+    return NextResponse.json({
+      msg: "Error updating status",
+    });
+  }
+
+  return NextResponse.json({
+    msg: "Updated status",
+  });
+}
