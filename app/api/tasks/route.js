@@ -1,6 +1,6 @@
 import { connectDb } from "@/lib/config/db";
 import { taskModel } from "@/lib/models/task";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 const loadDb = async () => {
   connectDb();
@@ -31,5 +31,21 @@ export async function POST(request) {
   }
   return NextResponse.json({
     msg: "Task is created successfully",
+  });
+}
+
+export async function DELETE(request) {
+  const { documentId } = await request.json();
+  try {
+    await taskModel.deleteOne({ _id: documentId });
+  } catch (error) {
+    console.error(`Error removing data, error: ${error}`);
+    return NextResponse.json({
+      msg: "Failed to remove data",
+    });
+  }
+
+  return NextResponse.json({
+    msg: "Task removed successfully",
   });
 }
