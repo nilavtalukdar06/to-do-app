@@ -26,7 +26,7 @@ const TaskTable = ({ data, deleteTask, completeTask }) => {
         </thead>
         <tbody>
           {/* <ToDo /> */}
-          {data.map((item, index) => (
+          {data && data.map((item, index) => (
             <ToDo
               key={index}
               title={item.title}
