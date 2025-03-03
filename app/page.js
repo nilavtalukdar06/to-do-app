@@ -20,11 +20,7 @@ export default function Home() {
     e.preventDefault();
     try {
       const response = await axios.post("/api/tasks", formData);
-      if (!response.ok) {
-        throw new Error("Failed to submit data");
-      }
-      const data = await response.json();
-      toast.success(data.msg);
+      toast.success(response.data.msg);
     } catch (error) {
       console.error(`Failed to submit data, error: ${error}`);
       toast.error("Error submitting data");
