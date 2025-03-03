@@ -8,9 +8,10 @@ const loadDb = async () => {
 
 loadDb();
 
-export async function GET(reuqest) {
+export async function GET() {
+  const data = await taskModel.find({});
   return NextResponse.json({
-    msg: "GET Method",
+    tasks: data,
   });
 }
 
