@@ -1,6 +1,6 @@
-# Next.js Todo Application
+# Next.js To-Do Application
 
-A full-stack Todo application built with Next.js 13, MongoDB, and Tailwind CSS.
+A full-stack to-do list application built with Next.js 15, MongoDB, and Tailwind CSS.
 
 ## Table of Contents
 
@@ -148,12 +148,12 @@ classDiagram
 
 ## Features
 
-- ✅ Create new tasks
-- ✅ Mark tasks as complete
-- ✅ Delete tasks
-- ✅ Persistent storage with MongoDB
-- ✅ Responsive design with Tailwind CSS
-- ✅ Server-side rendering with Next.js
+- Create new tasks with title and description
+- Mark tasks as completed
+- Delete tasks
+- Real-time updates using Next.js App Router
+- Persistent storage with MongoDB
+- Responsive design with Tailwind CSS
 
 ## Setup Instructions
 
@@ -252,7 +252,7 @@ graph TD
 
 ## Technologies Used
 
-- Next.js 13
+- Next.js 14
 - MongoDB with Mongoose
 - Tailwind CSS
 - React

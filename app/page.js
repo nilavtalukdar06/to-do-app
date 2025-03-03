@@ -1,6 +1,5 @@
 "use client";
 import TaskTable from "@/components/TaskTable";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -12,8 +11,9 @@ export default function Home() {
   const [taskData, setTaskData] = useState([]);
 
   const fetchTasks = async () => {
-    const response = await axios.get("/api/tasks");
-    setTaskData(response.data.tasks);
+    const response = await fetch("/api/tasks");
+    const data = await response.json();
+    setTaskData(data.tasks);
   };
 
   useEffect(() => {
@@ -29,8 +29,15 @@ export default function Home() {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/tasks", formData);
-      toast.success(response.data.msg);
+      const response = await fetch("/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      toast.success(data.msg);
       setFormData((form) => ({ ...form, title: "", description: "" }));
       fetchTasks();
     } catch (error) {
@@ -41,10 +48,15 @@ export default function Home() {
 
   const deleteTask = async (documentId) => {
     try {
-      const response = await axios.delete("/api/tasks", {
-        data: { documentId },
+      const response = await fetch("/api/tasks", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ documentId }),
       });
-      toast.success(response.data.msg);
+      const data = await response.json();
+      toast.success(data.msg);
       fetchTasks();
     } catch (error) {
       console.error(`Error removing task`);
@@ -54,8 +66,15 @@ export default function Home() {
 
   const completeTask = async (documentId) => {
     try {
-      const response = await axios.put("/api/tasks", { documentId });
-      toast.success(response.data.msg);
+      const response = await fetch("/api/tasks", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ documentId }),
+      });
+      const data = await response.json();
+      toast.success(data.msg);
       fetchTasks();
     } catch (error) {
       console.error(`Error updating status, error: ${error}`);
