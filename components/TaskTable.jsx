@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -22,14 +23,32 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import Loader from "./ui/loader";
 
 export function TaskTable({ tasks }) {
+  const [isDeleting, setIsDeleting] = useState("");
+  const deleteTask = async (taskId) => {
+    try {
+      setIsDeleting(taskId);
+      const { error } = await supabase.from("todos").delete().eq("id", taskId);
+      if (error) {
+        throw new Error(error);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Couldn't delete the task");
+    } finally {
+      setIsDeleting("");
+    }
+  };
+
   return (
     <Table>
       <TableCaption>A list of your recent tasks...</TableCaption>
@@ -70,8 +89,16 @@ export function TaskTable({ tasks }) {
                   <Button
                     variant="outline"
                     className="bg-red-500 border-red-700 border-[1.5px] hover:bg-red-700 transition-colors duration-300 ease-in-out text-white hover:text-white"
+                    disabled={isDeleting}
                   >
-                    Delete
+                    {isDeleting ? (
+                      <div className="flex gap-x-2 justify-center items-center">
+                        <Loader />
+                        Removing...
+                      </div>
+                    ) : (
+                      Delete
+                    )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -85,8 +112,19 @@ export function TaskTable({ tasks }) {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction className="bg-red-500 border-red-700 border-[1.5px] hover:bg-red-700 transition-colors duration-300 ease-in-out">
-                      Continue 🥲
+                    <AlertDialogAction
+                      className="bg-red-500 border-red-700 border-[1.5px] hover:bg-red-700 transition-colors duration-300 ease-in-out"
+                      onClick={() => deleteTask(task.id)}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? (
+                        <div className="flex gap-x-2 justify-center items-center">
+                          <Loader />
+                          Removing...
+                        </div>
+                      ) : (
+                        Delete
+                      )}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
