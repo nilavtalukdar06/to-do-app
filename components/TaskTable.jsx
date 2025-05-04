@@ -35,6 +35,7 @@ import supabase from "@/utils/supabase/supabase";
 
 export function TaskTable({ tasks, setTasks }) {
   const [isDeleting, setIsDeleting] = useState("");
+  const [isUpdating, setIsUpdating] = useState("");
   const deleteTask = async (taskId) => {
     try {
       setIsDeleting(taskId);
@@ -49,6 +50,29 @@ export function TaskTable({ tasks, setTasks }) {
       toast.error("Couldn't delete the task");
     } finally {
       setIsDeleting("");
+    }
+  };
+
+  const updateTask = async (taskId) => {
+    try {
+      setIsUpdating(taskId);
+      const { error } = await supabase
+        .from("tasks")
+        .update({ is_completed: true })
+        .eq("id", taskId);
+      if (error) {
+        throw new Error(error);
+      }
+      setTasks(
+        tasks.map((task) =>
+          task.id === taskId ? { ...task, is_completed: true } : task
+        )
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update the task status");
+    } finally {
+      setIsUpdating("");
     }
   };
 
@@ -67,7 +91,9 @@ export function TaskTable({ tasks, setTasks }) {
         {tasks.map((task, index) => (
           <TableRow key={task.id}>
             <TableCell className="font-medium">{index + 1}</TableCell>
-            <TableCell>{task.title}</TableCell>
+            <TableCell className={`${task.is_completed && "line-through"}`}>
+              {task.title}
+            </TableCell>
             <TableCell>
               <Dialog>
                 <DialogTrigger asChild>
@@ -84,9 +110,23 @@ export function TaskTable({ tasks, setTasks }) {
               </Dialog>
             </TableCell>
             <TableCell className="flex justify-end gap-x-2">
-              <Button className="bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out">
-                Done
+              <Button
+                className={`bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out ${
+                  task.is_completed && "scale-0"
+                }`}
+                disabled={isUpdating}
+                onClick={() => updateTask(task.id)}
+              >
+                {isUpdating === task.id ? (
+                  <div className="flex gap-x-2 justify-center items-center">
+                    <Loader />
+                    Updating...
+                  </div>
+                ) : (
+                  "Update"
+                )}
               </Button>
+
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
