@@ -1,6 +1,7 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -16,7 +17,10 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth">
       <body className={`${outfit.className} antialiased`}>
         <AuthProvider>
-          <main>{children}</main>
+          <main>
+            {children}
+            <Toaster />
+          </main>
         </AuthProvider>
       </body>
     </html>

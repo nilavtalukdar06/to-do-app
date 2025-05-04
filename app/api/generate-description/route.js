@@ -8,13 +8,19 @@ export async function POST(request) {
     if (!response) {
       throw new Error("Ai didn't return any response");
     }
-    return NextResponse.json({
-      description: response,
-    });
+    return NextResponse.json(
+      {
+        description: response,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error(`error generating ai response, error: ${error}`);
-    return NextResponse.json({
-      message: `internal server error, error: ${error}`,
-    });
+    return NextResponse.json(
+      {
+        message: `internal server error, error: ${error}`,
+      },
+      { status: 500 }
+    );
   }
 }
