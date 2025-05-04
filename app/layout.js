@@ -2,6 +2,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
+import Navbar from "./navbar";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
       <body className={`${outfit.className} antialiased`}>
         <AuthProvider>
           <main>
+            <Navbar />
             {children}
             <Toaster />
           </main>
