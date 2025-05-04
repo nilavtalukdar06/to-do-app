@@ -5,11 +5,13 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Loader from "./ui/loader";
 
 export default function Todo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const generateDescription = async () => {
     try {
@@ -69,6 +71,7 @@ export default function Todo() {
             value={title}
             required={true}
             onChange={(event) => setTitle(event.target.value)}
+            disabled={isSubmitting}
           />
           <div className="w-full h-fit relative">
             <Textarea
@@ -91,8 +94,21 @@ export default function Todo() {
           <Button
             className={`bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out rounded py-5`}
             type="submit"
+            disabled={isGenerating}
           >
-            Add Task
+            {isGenerating ? (
+              <div className="flex items-center gap-x-2 justify-center">
+                <Loader />
+                <span>Generating with AI...</span>
+              </div>
+            ) : isSubmitting ? (
+              <div className="flex items-center gap-x-2 justify-center">
+                <Loader />
+                <span>Adding...</span>
+              </div>
+            ) : (
+              "Add Task"
+            )}
           </Button>
         </form>
       </div>
