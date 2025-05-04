@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useState, useContext } from "react";
+import supabase from "@/utils/supabase/supabase";
 import toast from "react-hot-toast";
 import Loader from "./ui/loader";
 import SessionContext from "@/context/session-context";
@@ -44,6 +45,29 @@ export default function Todo() {
     }
   };
 
+  const addTask = async (e) => {
+    try {
+      e.stopPropagation();
+      setIsSubmitting(true);
+      const { error } = await supabase.from("tasks").insert([
+        {
+          title: title,
+          description: description,
+          is_completed: false,
+          user_id: session?.user?.id,
+        },
+      ]);
+      if (error) {
+        throw new Error(error);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error adding task");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="my-10 md:my-20 max-w-xl mx-auto p-4">
       <div className="w-full flex justify-center items-center">
@@ -66,7 +90,7 @@ export default function Todo() {
       </div>
       {/* form */}
       <div className="my-10">
-        <form className="flex flex-col gap-y-4">
+        <form className="flex flex-col gap-y-4" onSubmit={addTask}>
           <Input
             placeholder={"Enter the task title"}
             className="py-5 rounded shadow-none"
@@ -81,7 +105,7 @@ export default function Todo() {
               className={"py-5 rounded shadow-none"}
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              disabled={isGenerating}
+              disabled={isGenerating || isSubmitting}
               required={true}
             />
             <Button
@@ -96,7 +120,7 @@ export default function Todo() {
           <Button
             className={`bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out rounded py-5`}
             type="submit"
-            disabled={isGenerating}
+            disabled={isGenerating || isSubmitting}
           >
             {isGenerating ? (
               <div className="flex items-center gap-x-2 justify-center">
