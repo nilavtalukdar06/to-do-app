@@ -1,8 +1,10 @@
 export default function Footer() {
   return (
-    <footer class="bg-gray-800 text-white py-4">
-      <div class="container mx-auto text-center">
-        <p class="text-sm">&copy; 2025 Your Company. All rights reserved.</p>
+    <footer className="bg-gray-800 text-white py-4">
+      <div className="container mx-auto text-center">
+        <p className="text-sm">
+          &copy; 2025 Your Company. All rights reserved.
+        </p>
       </div>
     </footer>
   );
