@@ -52,7 +52,7 @@ export default function Todo() {
 
   const addTask = async (e) => {
     try {
-      e.stopPropagation();
+      e.preventDefault();
       setIsSubmitting(true);
       const { error } = await supabase.from("tasks").insert([
         {
@@ -65,6 +65,9 @@ export default function Todo() {
       if (error) {
         throw new Error(error);
       }
+      toast.success("Task Added Successfully");
+      setTitle("");
+      setDescription("");
     } catch (error) {
       console.error(error);
       toast.error("Error adding task");
@@ -95,7 +98,7 @@ export default function Todo() {
       </div>
       {/* form */}
       <div className="my-10">
-        <form className="flex flex-col gap-y-4" onSubmit={addTask}>
+        <form className="flex flex-col gap-y-4" onSubmit={(e) => addTask(e)}>
           <Input
             placeholder={"Enter the task title"}
             className="py-5 rounded shadow-none"
