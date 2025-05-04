@@ -4,6 +4,7 @@ import { Menu, XIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import supabase from "@/utils/supabase/supabase";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,10 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="sm:flex flex-1 justify-end items-center hidden">
-        <Button className="bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out">
+        <Button
+          className="bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out"
+          onClick={async () => await supabase.auth.signOut()}
+        >
           Log Out
         </Button>
       </div>
@@ -66,7 +70,7 @@ export default function Navbar() {
           </Link>
           <Button
             className="bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out"
-            onClick={() => setIsOpen(false)}
+            onClick={async () => await supabase.auth.signOut()}
           >
             Log Out
           </Button>
