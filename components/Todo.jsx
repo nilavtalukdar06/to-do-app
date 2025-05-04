@@ -27,11 +27,16 @@ export default function Todo() {
         method: "POST",
         body: JSON.stringify({
           title: title,
+          user_id: session?.user?.id,
         }),
         headers: {
           "Content-Type": "application/json",
         },
       });
+      if (response.status === 429) {
+        toast.error("Limit reached, try again after some time");
+        return;
+      }
       if (!response.ok) {
         throw new Error("Failed to generate description");
       }
