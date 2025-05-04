@@ -3,6 +3,7 @@ import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./navbar";
+import Footer from "./footer";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
           <main>
             <Navbar />
             {children}
+            <Footer />
             <Toaster />
           </main>
         </AuthProvider>
