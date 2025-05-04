@@ -34,6 +34,7 @@ to-do-app/
 ├── README.md             # Project documentation
 └── ...                   # Config files (jsconfig.json, .gitignore, etc.)
 ```
+
 </details>
 
 **Key Folders:**
@@ -57,12 +58,14 @@ to-do-app/
 ## ⚙️ Setup Instructions
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/your-username/to-do-app.git
    cd to-do-app
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    # or
@@ -72,6 +75,7 @@ to-do-app/
    ```
 
 3. **Run the development server:**
+
    ```bash
    npm run dev
    # or
@@ -87,15 +91,16 @@ to-do-app/
 
 ## 📜 Scripts & Commands
 
-| Command         | Description                   |
-|-----------------|------------------------------|
-| `dev`           | Start development server      |
-| `build`         | Build for production          |
-| `start`         | Start production server       |
-| `lint`          | Run ESLint (if configured)    |
-| `format`        | Run Prettier (if configured)  |
+| Command  | Description                  |
+| -------- | ---------------------------- |
+| `dev`    | Start development server     |
+| `build`  | Build for production         |
+| `start`  | Start production server      |
+| `lint`   | Run ESLint (if configured)   |
+| `format` | Run Prettier (if configured) |
 
 Example:
+
 ```bash
 npm run build
 npm start
@@ -108,13 +113,31 @@ npm start
 ```mermaid
 flowchart TD
     A[User opens app] --> B[Main Page Loads]
-    B --> C[User adds/edits/deletes task]
-    C --> D[State updates in UI]
-    D --> E{API call?}
-    E -- Yes --> F[API Route handles request]
-    F --> G[Update data source]
-    G --> D
-    E -- No --> D
+    B --> C[Fetch tasks from API]
+    C -->|Success| D[Render tasks in UI]
+    C -->|Error| E[Show error message]
+    D --> F[User adds/edits/deletes task]
+    F --> G{Is it an add, edit, or delete?}
+    G -- Add --> H[Show add task form]
+    H --> I[User submits new task]
+    I --> J[Send add request to API]
+    J -->|Success| K[Update UI with new task]
+    J -->|Error| E
+    G -- Edit --> L[Show edit form]
+    L --> M[User submits changes]
+    M --> N[Send update request to API]
+    N -->|Success| K
+    N -->|Error| E
+    G -- Delete --> O[User confirms delete]
+    O --> P[Send delete request to API]
+    P -->|Success| Q[Remove task from UI]
+    P -->|Error| E
+    K --> D
+    Q --> D
+    D --> R[User marks task as complete/incomplete]
+    R --> S[Send status update to API]
+    S -->|Success| K
+    S -->|Error| E
 ```
 
 ---
@@ -159,6 +182,6 @@ flowchart TD
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [ISC License](LICENSE).
 
 ---
