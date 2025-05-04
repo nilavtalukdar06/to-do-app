@@ -39,7 +39,11 @@ export default function Tasks() {
     <section className="min-h-screen max-w-screen overflow-x-hidden relative">
       <div className="my-10 md:my-20 max-w-4xl mx-auto p-4">
         <div className="w-full flex justify-center items-center">
-          {isLoading ? <FadeLoader /> : <TaskTable tasks={tasks} />}
+          {isLoading ? (
+            <FadeLoader />
+          ) : (
+            <TaskTable tasks={tasks} setTasks={setTasks} />
+          )}
         </div>
       </div>
     </section>

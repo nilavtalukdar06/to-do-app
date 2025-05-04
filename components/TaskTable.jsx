@@ -31,15 +31,18 @@ import { Button } from "./ui/button";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import Loader from "./ui/loader";
+import supabase from "@/utils/supabase/supabase";
 
-export function TaskTable({ tasks }) {
+export function TaskTable({ tasks, setTasks }) {
   const [isDeleting, setIsDeleting] = useState("");
   const deleteTask = async (taskId) => {
     try {
       setIsDeleting(taskId);
-      const { error } = await supabase.from("todos").delete().eq("id", taskId);
+      const { error } = await supabase.from("tasks").delete().eq("id", taskId);
       if (error) {
         throw new Error(error);
+      } else {
+        setTasks(tasks.filter((task) => taskId !== task.id));
       }
     } catch (error) {
       console.error(error);
@@ -91,13 +94,13 @@ export function TaskTable({ tasks }) {
                     className="bg-red-500 border-red-700 border-[1.5px] hover:bg-red-700 transition-colors duration-300 ease-in-out text-white hover:text-white"
                     disabled={isDeleting}
                   >
-                    {isDeleting ? (
+                    {isDeleting === task.id ? (
                       <div className="flex gap-x-2 justify-center items-center">
                         <Loader />
                         Removing...
                       </div>
                     ) : (
-                      Delete
+                      "Delete"
                     )}
                   </Button>
                 </AlertDialogTrigger>
@@ -117,13 +120,13 @@ export function TaskTable({ tasks }) {
                       onClick={() => deleteTask(task.id)}
                       disabled={isDeleting}
                     >
-                      {isDeleting ? (
+                      {isDeleting === task.id ? (
                         <div className="flex gap-x-2 justify-center items-center">
                           <Loader />
                           Removing...
                         </div>
                       ) : (
-                        Delete
+                        "Delete"
                       )}
                     </AlertDialogAction>
                   </AlertDialogFooter>
