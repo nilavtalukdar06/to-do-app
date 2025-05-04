@@ -116,4 +116,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  .primary-color {
+    background-color: #3fcf8e;
+  }
+  .secondary-color {
+    background-color: #34b27b;
+  }
 }

@@ -1,12 +1,9 @@
-import { Button } from "@/components/ui/button";
+import Navbar from "./navbar";
 
 export default function Home() {
   return (
-    <section>
-      <h1>Home</h1>
-      <div className="p-4">
-        <Button variant="outline">Click Me 😁</Button>
-      </div>
+    <section className="min-h-screen max-w-screen overflow-x-hidden relative">
+      <Navbar />
     </section>
   );
 }
