@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-async function main({ title }) {
+async function main(title) {
   const response = await ai.models.generateContent({
     model: "gemini-2.0-flash",
     contents: title.toString().trim(),
@@ -13,7 +13,5 @@ async function main({ title }) {
   });
   return response.text;
 }
-
-await main();
 
 export default main;
