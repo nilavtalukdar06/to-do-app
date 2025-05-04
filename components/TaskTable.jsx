@@ -18,6 +18,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 
 export function TaskTable({ tasks }) {
@@ -37,7 +46,21 @@ export function TaskTable({ tasks }) {
           <TableRow key={task.id}>
             <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>{task.title}</TableCell>
-            <TableCell>{task.description}</TableCell>
+            <TableCell>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out">
+                    Reveal
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Description</DialogTitle>
+                    <DialogDescription>{task.description}</DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            </TableCell>
             <TableCell className="flex justify-end gap-x-2">
               <Button className="bg-[#3fcf8e] border-[#34b27b] border-[1.5px] hover:bg-[#34b27b] transition-colors duration-300 ease-in-out">
                 Done
