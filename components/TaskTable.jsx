@@ -91,7 +91,7 @@ export function TaskTable() {
                 <AlertDialogTrigger asChild>
                   <Button
                     variant="outline"
-                    className="bg-red-500 border-red-700 border-[1.5px] hover:bg-red-700 transition-colors duration-300 ease-in-out text-white"
+                    className="bg-red-500 border-red-700 border-[1.5px] hover:bg-red-700 transition-colors duration-300 ease-in-out text-white hover:text-white"
                   >
                     Delete
                   </Button>
