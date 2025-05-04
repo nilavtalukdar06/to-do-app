@@ -3,15 +3,17 @@ import { Sparkles } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import Loader from "./ui/loader";
+import SessionContext from "@/context/session-context";
 
 export default function Todo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const session = useContext(SessionContext);
 
   const generateDescription = async () => {
     try {

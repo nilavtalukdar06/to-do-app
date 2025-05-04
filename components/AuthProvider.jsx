@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import SessionContext from "@/context/session-context";
 import supabase from "@/utils/supabase/supabase";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
@@ -33,6 +34,12 @@ export default function AuthProvider({ children }) {
       </main>
     );
   } else {
-    return <div>{children}</div>;
+    return (
+      <div>
+        <SessionContext.Provider value={session}>
+          {children}
+        </SessionContext.Provider>
+      </div>
+    );
   }
 }
